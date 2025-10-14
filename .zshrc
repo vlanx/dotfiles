@@ -1,5 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc. Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -118,8 +117,9 @@ source <(kubectl completion zsh)
 alias 'k'=kubectl
 alias 'kp'="kubectl get pods -n "
 alias 'p'="python3"
-alias 'n'="nvim"
+alias 'n'="vi"
 alias 'v'="vim"
+alias 'vi'="nvim"
 alias '?'=duck
 alias '??'=groq
 alias '???'=google
@@ -128,10 +128,29 @@ alias 'c'="clear"
 alias 'h'="cd ~/"
 alias 'conf'="cd ~/.config/nvim/"
 alias 'wa'="watch"
+alias 'lh'="ls -ahl"
 alias df='df -h'
 alias diff="diff --color"
 alias gitl="git log -n 5 --graph --oneline"
-alias 'rr'='sudo $(fc -ln -1)'
+alias lz="lazygit"
+alias sr="source venv/bin/activate"
+alias sht="history | grep "
+alias "rm"="rm -i"
+alias rr='sudo $(fc -ln -1)' #rerun last command as sudo
+alias 'ssh6'='ssh -6'
+alias 'dc'='docker-compose'
+alias 'dk'='docker'
+
+
+
+# Set vi mode for editing commands
+# set -o vi
+# bindkey 'jk' vi-cmd-mode
+# bindkey 'kj' vi-cmd-mode
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+ZVM_VI_INSERT_ESCAPE_BINDKEY=kj
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+source "$SCRIPTS/docker_prompt_help"

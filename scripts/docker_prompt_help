@@ -1,0 +1,40 @@
+function prompt_docker_context() {
+	local docker_context_cache="/tmp/p10k_docker_context"
+	local docker_context_cache_timestamp="/tmp/p10k_docker_context_timestamp"
+	local cache_ttl=60
+
+	if [[ -f "$docker_context_cache" && -f "$docker_context_cache_timestamp" ]]; then
+		local now=$(date +%s)
+		local cache_time=$(cat "$docker_context_cache_timestamp")
+		if ((now - cache_time < cache_ttl)); then
+			local cached_context=$(cat "$docker_context_cache")
+			if [[ -n "$cached_context" ]]; then
+				p10k segment -f 27 -i '🐳' -t "$cached_context"
+				return
+			fi
+		fi
+	fi
+
+	local docker_context
+	docker_context=$(docker context show 2>/dev/null)
+	if [[ -n "$docker_context" ]]; then
+		echo "$docker_context" >"$docker_context_cache"
+		date +%s >"$docker_context_cache_timestamp"
+		p10k segment -f 27 -i '🐳' -t "$docker_context"
+	fi
+}
+
+function docker_context_cache_clear() {
+	rm -f "/tmp/p10k_docker_context" "/tmp/p10k_docker_context_timestamp"
+}
+
+if ! typeset -f docker >/dev/null; then
+	function docker() {
+		command docker "$@"
+		local ret=$?
+		if [[ "$1" == "context" && "$2" == "use" ]]; then
+			docker_context_cache_clear
+		fi
+		return $ret
+	}
+fi
