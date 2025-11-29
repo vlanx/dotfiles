@@ -4,18 +4,23 @@ window-theme = system
 bold-is-bright = true
 clipboard-read = allow
 clipboard-write = allow
-cursor-style = bar
-font-size = 13.5
+font-size = 12.5
 window-padding-balance = true
+cursor-style = bar
+cursor-style-blink = true
 
 # Gruvbox-material colorscheme
-theme = gruvbox-material-hard-dark
+# theme = light:gruvbox-material-soft-light,dark:gruvbox-material-soft-dark
+# theme = light:rose-pine-dawn,dark:rose-pine
+# theme = rose-pine-moon
+theme = Rose Pine
 
 # Font specification
-font-family = JetBrains Mono NL
-font-style = Regular
+# font-family = JetBrains Mono NL
+font-family = SF Mono
+font-style = Medium
 font-style-bold = Bold
-font-style-italic = Regular Italic
+font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
 
 # Map 'Command+a' to 'Ctrl-b'. This is usefull to remap the tmux default
@@ -23,3 +28,8 @@ font-style-bold-italic = Bold Italic
 keybind = super+a=text:\x02
 # Map 'Command+s' to 'Ctrl-s'. Same as above but this is to send the prefix remotely for nested tmux session.
 keybind = super+s=text:\x13
+
+keybind = super+h=text:\x1b[D
+keybind = super+j=text:\x1b[B
+keybind = super+k=text:\x1b[A
+keybind = super+l=text:\x1b[C
