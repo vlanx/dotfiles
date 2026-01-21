@@ -4,24 +4,23 @@ window-theme = system
 bold-is-bright = true
 clipboard-read = allow
 clipboard-write = allow
-font-size = 12.5
+font-size = 13.5
 window-padding-balance = true
 cursor-style = bar
 cursor-style-blink = true
 
 # Gruvbox-material colorscheme
-# theme = light:gruvbox-material-soft-light,dark:gruvbox-material-soft-dark
-# theme = light:rose-pine-dawn,dark:rose-pine
-# theme = rose-pine-moon
-theme = Rose Pine
+theme = gruvbox-minimal-hard-dark
+#theme = rose-pine-moon
+# theme = light:Rose Pine Dawn,dark:Rose Pine
 
 # Font specification
 # font-family = JetBrains Mono NL
 font-family = SF Mono
-font-style = Medium
-font-style-bold = Bold
-font-style-italic = Medium Italic
-font-style-bold-italic = Bold Italic
+font-style = Semibold
+font-style-bold = Heavy
+font-style-italic = Semibold Italic
+font-style-bold-italic = Heavy Italic
 
 # Map 'Command+a' to 'Ctrl-b'. This is usefull to remap the tmux default
 # prefix command to a more ergonomic position.
