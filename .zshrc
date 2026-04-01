@@ -133,24 +133,44 @@ alias df='df -h'
 alias diff="diff --color"
 alias gitl="git log -n 5 --graph --oneline"
 alias lz="lazygit"
-alias sr="source venv/bin/activate"
+alias sr="source .venv/bin/activate"
 alias sht="history | grep "
 alias "rm"="rm -i"
 alias rr='sudo $(fc -ln -1)' #rerun last command as sudo
 alias 'ssh6'='ssh -6'
 alias 'dc'='docker-compose'
 alias 'dk'='docker'
+alias k9s='TERM=xterm-256color k9s' # to fix k9s behavior
+alias nst='netstat -nr -f inet' # show ip routes on macOS for ipv4 only
+alias b='bat'
+alias nd='nvim -d' # start a neovim diff session
 
-
+lado() {                                         
+  export DOCKER_HOST=$(docker context inspect --format '{{.Endpoints.docker.Host}}')  
+  lazydocker                                     
+  unset DOCKER_HOST                            
+}
 
 # Set vi mode for editing commands
 # set -o vi
-# bindkey 'jk' vi-cmd-mode
-# bindkey 'kj' vi-cmd-mode
-ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
 ZVM_VI_INSERT_ESCAPE_BINDKEY=kj
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+# Bind Ctrl+P / Ctrl+N to prefix-based history search; same behavior as arrow keys
+# It has to be this way because else the zsh-vi-mode will override these keybinds
+function zvm_after_init() {
+  bindkey -M viins '^P' up-line-or-beginning-search
+  bindkey -M viins '^N' down-line-or-beginning-search
+}
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source "$SCRIPTS/docker_prompt_help"
+source "$SCRIPTS/kdbg"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
