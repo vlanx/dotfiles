@@ -2,22 +2,55 @@
 # setting the locale, some users have issues with different locales, this forces the correct one
 export LC_ALL=en_US.UTF-8
 
-get_ssid() {
-  local wifi_network=$(ipconfig getsummary en0 | awk -F ' SSID : ' '/ SSID : / {print $2}')
-  if [[ $wifi_network != "" ]]; then
-    echo "$wifi_label$wifi_network"
-  else
-    echo 'Ethernet'
-  fi
+get_ip() {
+  ipconfig getifaddr "$1" 2>/dev/null
+}
+
+get_vpn_ip() {
+  ifconfig "$1" 2>/dev/null | awk '/inet / {print $2; exit}'
+}
+
+get_default_iface() {
+  netstat -rn -f inet 2>/dev/null | awk '$1 == "default" { print ($NF ~ /^[0-9]+$/ ? $(NF-1) : $NF); exit }'
 }
 
 main() {
-  network="Offline"
-  if ping -q -c 1 -W 1 "google.com" &>/dev/null; then
-    network="$(get_ssid)"
+  local iface
+  local ip
+  local vpn_ip
+  local eth_icon='  '
+  local wifi_icon='  '
+  local vpn_icon='󱇱  '
+  local icon
+
+  vpn_ip=$(get_vpn_ip utun8)
+  [ -n "$vpn_ip" ] && vpn_ip="{ $vpn_icon$vpn_ip } "
+
+  # Get the interface attached to our default route.
+  iface=$(get_default_iface)
+  if [[ "$iface" == en* ]]; then
+    # Get the ip address of the interface
+    ip=$(get_ip "$iface")
+    if [ -n "$ip" ]; then
+      icon=$eth_icon
+      [ "$iface" = "en0" ] && icon=$wifi_icon
+      echo "$vpn_ip$icon$ip"
+      return
+    fi
   fi
 
-  echo "$network"
+  # For when we're not connected to any routed network, just LAN (en4 and en5 have precedence)
+  for iface in en4 en5 en0; do
+    ip=$(get_ip "$iface")
+    if [ -n "$ip" ]; then
+      icon=$eth_icon
+      [ "$iface" = "en0" ] && icon=$wifi_icon
+      echo "$vpn_ip$icon$ip"
+      return
+    fi
+  done
+
+  echo "No IP Address"
 }
 
 #run main driver function
